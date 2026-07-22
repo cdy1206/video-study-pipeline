@@ -12,15 +12,17 @@
 
 ```bash
 gh auth login
+gh auth setup-git
 ```
 
-然后安装 Skill。仓库为 private 时，把 `gh` 的令牌传给安装器：
+然后安装 Skill。私有仓库使用 Git 模式，可复用 `gh` 配置的 Git 凭据并避开 Python 本地证书链差异：
 
 ```bash
-GH_TOKEN="$(gh auth token)" python3 \
+python3 \
   "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
   --repo cdy1206/video-study-pipeline \
-  --path video-study-pipeline
+  --path video-study-pipeline \
+  --method git
 ```
 
 安装完成后，在新的 Codex 任务中使用 `$video-study-pipeline`，或直接提供视频链接并要求生成 HTML、PDF 或 Presentation。
@@ -33,10 +35,11 @@ GH_TOKEN="$(gh auth token)" python3 \
 mv "${CODEX_HOME:-$HOME/.codex}/skills/video-study-pipeline" \
   "${CODEX_HOME:-$HOME/.codex}/skills/video-study-pipeline.backup.$(date +%Y%m%d-%H%M%S)"
 
-GH_TOKEN="$(gh auth token)" python3 \
+python3 \
   "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
   --repo cdy1206/video-study-pipeline \
-  --path video-study-pipeline
+  --path video-study-pipeline \
+  --method git
 ```
 
 ## 运行环境
