@@ -1,0 +1,4 @@
+interface:
+  display_name: "Video Study Pipeline"
+  short_description: "Video links to asset-backed DeepNote PDF, article HTML, and 16:9 presentation outputs"
+  default_prompt: "Turn this Bilibili or YouTube video into a transcript-backed study package. Build a Blog-style deep_note.md using the normalized 0-5 section structure without standalone reading-navigation or glossary chapters, build asset_manifest/assets, then create renderer-specific enrichment briefs before output: DeepNote article-derived PDF, DeepNote LaTeX PDF, official-compatible LaTeX lecture note, article HTML, presentation, or a combination."
