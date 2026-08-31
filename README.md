@@ -10,6 +10,7 @@ Turn long videos into illustrated notes with searchable text, subtitles, and lin
 ![Input](https://img.shields.io/badge/Input-Bilibili%20%7C%20YouTube%20%7C%20Text-b45309)
 ![Output](https://img.shields.io/badge/Output-HTML%20%7C%20PDF%20%7C%20Presentation-1d4ed8)
 ![Local First](https://img.shields.io/badge/Delivery-Local--first-334155)
+[![License: MIT](https://img.shields.io/badge/License-MIT-f59e0b)](LICENSE)
 
 </div>
 
@@ -389,7 +390,9 @@ python3 -m py_compile video-study-pipeline/scripts/*.py
 
 当前版本以 **视频输入 + 交互式图文笔记** 为最成熟主路径；PDF、演示网页和非视频输入已经纳入统一架构，但实际效果仍依赖本机工具链与来源质量。
 
-本仓库目前**尚未包含明确的开源许可证**。在许可证文件加入之前，默认版权规则仍然适用；这意味着公开可见不等于获得复制、修改、分发或商业使用授权。如果你希望在自己的项目中分发或商用，请先通过 GitHub Issue 联系仓库所有者确认授权。
+除非另有说明，本仓库由项目作者创作的代码和文档采用 [MIT License](LICENSE)，允许使用、修改、分发和商业使用，但需要保留版权声明和许可证文本。
+
+README 效果图中出现的第三方视频画面、封面、平台标识及其他源媒体不包含在 MIT 授权范围内，其相关权利仍归原权利人所有。
 
 ---
 
