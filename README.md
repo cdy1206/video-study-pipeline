@@ -156,7 +156,8 @@ flowchart TD
 python3 \
   "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
   --repo cdy1206/video-study-pipeline \
-  --path video-study-pipeline
+  --path video-study-pipeline \
+  --method git
 ```
 
 然后重新打开 Codex 任务，使用 `$video-study-pipeline`。
@@ -218,7 +219,8 @@ mv "$skill_dir" "$skill_dir.backup.$(date +%Y%m%d-%H%M%S)"
 python3 \
   "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
   --repo cdy1206/video-study-pipeline \
-  --path video-study-pipeline
+  --path video-study-pipeline \
+  --method git
 ```
 
 Claude Code 或 Cursor 的手动安装可以采用相同的“先改名备份，再复制新版”策略。
@@ -370,6 +372,16 @@ git grep -nE '(API_KEY|COOKIE|Authorization:|/Users/)' -- . ':!README.md'
 1. 确认路径为 `<skills-root>/video-study-pipeline/SKILL.md`，中间没有多套一层仓库目录。
 2. 重新打开一个 Agent 会话；部分客户端只在会话启动时扫描 Skills。
 3. 明确输入 `$video-study-pipeline` 或让 Agent 先读取该 `SKILL.md`。
+
+### Codex 安装器提示 `CERTIFICATE_VERIFY_FAILED`
+
+这是 Python 本地证书链问题，不代表仓库不可访问。README 的推荐命令已经使用 `--method git`，会通过系统 Git 克隆并绕开 Python ZIP 下载路径。先确认：
+
+```bash
+git ls-remote https://github.com/cdy1206/video-study-pipeline.git HEAD
+```
+
+如果该命令可以返回 commit hash，重新执行带 `--method git` 的安装命令即可。
 
 ### 视频没有字幕
 
