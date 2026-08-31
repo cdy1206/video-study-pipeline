@@ -1,0 +1,158 @@
+.brand span {
+  min-width: auto;
+  padding-inline: .55rem;
+}
+
+.prose > p {
+  max-width: 49rem;
+}
+
+.prose strong {
+  color: var(--ink);
+}
+
+.worked-example,
+.boundary-note,
+.memory-line,
+.formula-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 10rem) minmax(0, 1fr);
+  gap: 1.15rem;
+  align-items: start;
+  margin: 2rem 0;
+  padding: 1.35rem 1.45rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--paper) 91%, var(--teal-soft));
+  box-shadow: 0 18px 48px rgba(23, 42, 39, .055);
+}
+
+.worked-example {
+  border-left: .32rem solid var(--gold);
+  background: var(--gold-soft);
+}
+
+.boundary-note {
+  border-left: .32rem solid #a85d43;
+  background: #f7ede8;
+}
+
+.memory-line {
+  border-left: .32rem solid var(--teal);
+  background: var(--teal-soft);
+}
+
+.worked-example strong,
+.boundary-note strong,
+.memory-line strong {
+  font-family: var(--mono);
+  font-size: .76rem;
+  line-height: 1.5;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.worked-example span,
+.boundary-note span,
+.memory-line span {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+.formula-card {
+  grid-template-columns: 1fr;
+  gap: .75rem;
+  border: 1px solid rgba(20, 123, 112, .28);
+  background: #edf6f3;
+  text-align: center;
+}
+
+.formula-card code {
+  display: block;
+  color: #123d39;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: clamp(.9rem, 2vw, 1.18rem);
+  line-height: 1.7;
+  white-space: normal;
+}
+
+.formula-card span {
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.65;
+}
+
+.inline-evidence figcaption b {
+  min-width: 3.6rem;
+}
+
+.inline-evidence.diagram .media-frame {
+  padding: clamp(.85rem, 2vw, 1.6rem);
+  background: #fbfaf6;
+}
+
+.inline-evidence.diagram img {
+  max-height: min(62vh, 640px);
+}
+
+.chapter-summary {
+  max-width: 48rem;
+}
+
+.chapter-time-label {
+  display: inline-flex;
+  margin-top: 1rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: .73rem;
+  line-height: 1.4;
+  letter-spacing: .025em;
+}
+
+.lead-map.no-thesis-map {
+  margin-bottom: 4.5rem;
+  padding-bottom: 2.4rem;
+}
+
+.source-clip-play {
+  flex: 0 1 auto;
+  max-width: 100%;
+  padding: .34rem .62rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-scroll {
+  margin-block: 2.15rem;
+}
+
+.table-scroll table {
+  min-width: 680px;
+}
+
+@media (max-width: 760px) {
+  .worked-example,
+  .boundary-note,
+  .memory-line {
+    grid-template-columns: 1fr;
+    gap: .45rem;
+    padding: 1.05rem 1.1rem;
+  }
+
+  .worked-example span,
+  .boundary-note span,
+  .memory-line span {
+    font-size: .97rem;
+  }
+
+  .formula-card {
+    padding: 1rem;
+  }
+
+  .source-clip-play {
+    flex: 0 1 auto;
+  }
+}

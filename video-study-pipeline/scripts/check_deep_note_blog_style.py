@@ -12,8 +12,9 @@ from typing import Any
 
 CANONICAL_BODY_H2 = "1. 主体正文：按 Blog 方式重构源材料内容"
 LEGACY_VIDEO_BODY_H2 = "1. 主体正文：按 Blog 方式重构视频内容"
+BODY_H2_PREFIX = "1. 主体正文"
 REQUIRED_H2_ALIASES = {
-    CANONICAL_BODY_H2: [CANONICAL_BODY_H2, LEGACY_VIDEO_BODY_H2],
+    CANONICAL_BODY_H2: [CANONICAL_BODY_H2, LEGACY_VIDEO_BODY_H2, BODY_H2_PREFIX],
     "2. 判断框架与结论": ["2. 判断框架与结论"],
 }
 
@@ -63,6 +64,12 @@ MERMAID_RE = re.compile(r"```mermaid\b", re.I)
 MERMAID_BLOCK_RE = re.compile(r"```mermaid\b(.*?)```", re.I | re.S)
 TABLE_RE = re.compile(r"^\|.+\|\s*$", re.M)
 CODE_RE = re.compile(r"```(?!mermaid\b).+", re.I)
+V4_SEMANTIC_BLOCK_PATTERNS = {
+    "worked_examples": re.compile(r'class=["\'][^"\']*\bworked-example\b', re.I),
+    "boundary_notes": re.compile(r'class=["\'][^"\']*\bboundary-note\b', re.I),
+    "memory_lines": re.compile(r'class=["\'][^"\']*\bmemory-line\b', re.I),
+    "formula_cards": re.compile(r'class=["\'][^"\']*\bformula-card\b', re.I),
+}
 
 GENERIC_STRUCTURE_LABELS = [
     "背景问题",
@@ -125,7 +132,18 @@ def h2_titles(text: str) -> list[str]:
 def missing_required_h2(titles: list[str]) -> list[str]:
     missing: list[str] = []
     for canonical, aliases in REQUIRED_H2_ALIASES.items():
-        if not any(alias in titles for alias in aliases):
+        found = False
+        for title in titles:
+            for alias in aliases:
+                if title == alias:
+                    found = True
+                    break
+                if alias == BODY_H2_PREFIX and title.startswith(f"{BODY_H2_PREFIX}："):
+                    found = True
+                    break
+            if found:
+                break
+        if not found:
             missing.append(canonical)
     return missing
 
@@ -567,6 +585,10 @@ def check(path: Path, manifest_path: Path | None = None) -> dict[str, Any]:
     body_table_lines = len(TABLE_RE.findall(body_section))
     table_lines = len(TABLE_RE.findall(text))
     code_blocks = len(CODE_RE.findall(text))
+    semantic_block_counts = {
+        name: len(pattern.findall(body_section))
+        for name, pattern in V4_SEMANTIC_BLOCK_PATTERNS.items()
+    }
     low_information_mermaids = low_information_mermaid_blocks(text)
     manifest_assets = inserted_manifest_assets(manifest)
     missing_manifest_assets = asset_ids_missing_from_text(text, manifest) if manifest else []
@@ -626,6 +648,14 @@ def check(path: Path, manifest_path: Path | None = None) -> dict[str, Any]:
             "candidate_keyframes": keyframe_policy["candidate_count"],
             "asset_intent_roles": asset_selection_policy["roles"],
             "asset_intent_role_count": asset_selection_policy["role_count"],
+            "v4_semantic_blocks": semantic_block_counts,
+        },
+        "semantic_review": {
+            "required": True,
+            "note": (
+                "Structural counts do not prove teaching quality. Review important chapters "
+                "against the source for mechanism, worked example, boundary, and transfer value."
+            ),
         },
         "keyframe_policy": keyframe_policy,
         "asset_selection_policy": asset_selection_policy,

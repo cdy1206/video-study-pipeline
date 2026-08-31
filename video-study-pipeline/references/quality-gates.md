@@ -13,13 +13,17 @@
 - The output teaches the video without requiring the user to watch it.
 - Long or dense videos are not collapsed into a shallow outline.
 - Major time blocks or chapters are represented by substantive sections.
-- `deep_note.md` follows the focused Blog-style section order from `references/deep-note-blog-prompt.md`: `1. 主体正文：按 Blog 方式重构视频内容` and `2. 判断框架与结论`, with no standalone `观点卡片`, `阅读导航`, `背景与问题`, `全文结构图`, `核心概念与术语`, separate `总结`, mixed `八/九/十` top-level numbering, or standalone final ASR limitations chapter.
+- `deep_note.md` follows the focused Blog-style section order from `references/deep-note-blog-prompt.md`: a content-specific heading beginning with `1. 主体正文` and the exact `2. 判断框架与结论`, with no standalone `观点卡片`, `阅读导航`, `背景与问题`, `全文结构图`, `核心概念与术语`, separate `总结`, mixed `八/九/十` top-level numbering, or standalone final ASR limitations chapter. Older literal `按 Blog 方式重构...` headings remain compatible.
 - `deep_note.md` body reads like a Blog article, not a third-person video recap. The main body should not repeatedly use report scaffolding such as "本节结论", "视频开头讨论", "讲者提到", "这一部分讲了", or "本节主要介绍".
 - `deep_note.md` does not contain generic padding inserted to satisfy length checks. Repeated paragraphs such as "进一步说，X 不应该被读成一句孤立结论..." or "落到实践中，这一层至少要追问三件事..." fail the content gate.
 - Source-role terms are judged semantically, not by raw count. In courses, interviews, lectures, and podcasts, "讲者", "演讲者", "老师", "嘉宾", "主持人", "受访者", and "UP 主" may appear when they clarify provenance, teaching relation, quote attribution, or visual scene evidence.
 - Mechanical cleanup fails the content gate. Do not globally replace speaker terms, use regex-only prose repair, or introduce malformed wording such as "演叙述者".
 - In `## 1. 主体正文`, local takeaways should normally come after reasoning, examples, and mechanisms. Do not front-load every subsection with a labeled conclusion.
 - Subsections should not all have the same short summary shape. Dense sections need developed paragraphs that explain mechanism, example, implication, and transition. However, concise subsections are acceptable when the source only supports a compact point; do not pad them just to pass a character threshold.
+- For the V4 learning-note profile, important chapters resolve a real reader question and teach a mechanism rather than merely restating a thesis. Dense or consequential claims should include a source-backed worked example and a boundary, counterexample, or failure condition when the source supports them.
+- V4 semantic blocks such as `worked-example`, `boundary-note`, `memory-line`, and `formula-card` are optional. They must add scan value, remain source-backed, and not repeat the surrounding prose. Repeating the same card sequence in every subsection fails the content gate.
+- Memory hooks are sparse and content-specific. Generic slogans, motivational filler, or a paraphrase of the preceding conclusion do not count as a learning aid.
+- Checker counts and structural checks do not prove V4 teaching quality. A human semantic review must verify mechanisms, examples, boundaries, and transfer guidance against the transcript or source package before delivery.
 - `deep_note.md` is asset-aware. It includes contextual asset anchors, inline tables, Mermaid/source diagrams, screenshot suggestions, quote/code/formula blocks, or other renderer-consumable material slots where they support the argument.
 - Body assets follow `references/visual-asset-selection.md`. Planned assets identify or clearly imply their primary intent: `evidence`, `structure`, or `comparison`.
 - Medium/long videos should normally include at least two distinct asset intents across the body when source material supports them. A single decorative keyframe or a single generic diagram does not satisfy the asset-aware requirement.
@@ -44,6 +48,14 @@
 - Inline images and diagrams are size-constrained by a designed frame; normal body figures do not default to full-width/full-page treatment.
 - Selected keyframes, generated diagrams, and tables are inserted near the section they support; a visible front-loaded asset table is not a substitute for contextual placement.
 - No reader-facing generic "资产说明", "assets used", or asset audit block appears in the final article unless the user explicitly asked for an audit appendix.
+- For the default V4 profile, the accepted V3 interaction shell remains intact: search, bookmarks, personal notes/export, reading progress, merged chapter/transcript timeline, raw ASR expansion, focused source clips, and local-video seeking all work.
+- The custom player exposes `整理字幕` and `逐字字幕` as direct choices, keeps subtitle visibility as a separate control, and preserves playback speed, seeking, 10-second skip, volume/mute, fullscreen, and close controls.
+- The custom player does not repeat a chapter list already available in the article navigation and merged chapter/transcript route.
+- Split-player mode sizes to its actual media, subtitle, and control content instead of stretching to the viewport and leaving a blank lower panel; on short screens it uses a viewport-bounded scroll container.
+- Focus mode hides the subtitle and full control panels without deleting their state, preserves the always-visible player close button, exposes an exit control on pointer activity or pause, and restores the complete player when exited.
+- V4 reader-facing asset labels use `原片` and `结构图` rather than internal asset ids. Worked examples, boundary notes, memory hooks, and formula cards are visually distinct, responsive, and do not overflow.
+- The default V4 reading view has one chapter directory: the sticky left reading path. It does not repeat the same chapter list in the article opening. Chapter header time ranges are non-interactive orientation labels. Each chapter has at most one primary source-clip button by default; a nearby clickable keyframe must not duplicate the same interval and claim. Source-clip buttons remain compact; the visible label contains source, time range, and duration, while the full editorial reason remains available through tooltip and accessibility text.
+- The V4 hero deck states the video's central judgment or causal relationship in roughly 25-55 Chinese characters. It does not waste the cover on product descriptions such as `精读笔记`, `本文将`, `重构`, `回到原片`, or `帮助你快速了解视频`.
 
 ## Asset Checks
 

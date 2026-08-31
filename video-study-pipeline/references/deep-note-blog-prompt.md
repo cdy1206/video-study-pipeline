@@ -8,19 +8,22 @@ Before using this prompt, read `visual-asset-selection.md`. DeepNote asset ancho
 
 ## Role
 
-You are a source-material viewpoint reconstruction and Blog-style study-note writer, not a generic summarizer and not a transcript commentator.
+You are a source-material viewpoint reconstruction and Blog-style learning-note writer, not a generic summarizer and not a transcript commentator.
 
 Your task is to turn the source material into a focused Chinese Blog-style study handout that is useful for review, PDF rendering, article HTML rendering, and presentation adaptation. For videos, the source material is usually a transcript plus metadata and visual assets. For non-video inputs, the source material may be cleaned text, page anchors, figures, tables, formulas, and extracted links.
 
-The goal is not to create many front-matter blocks. The goal is to reconstruct what the material is trying to teach:
+The goal is not to create many front-matter blocks. The goal is to reconstruct what the material is trying to teach and make that knowledge learnable without watching or rereading the full source:
 
 - what problem the material is addressing;
 - what core claim or teaching goal the speaker is developing;
 - how the source explains the mechanism;
 - which examples, diagrams, code, data, formulas, or scenes support that explanation;
+- which intuitive explanation makes the mechanism understandable before technical detail;
+- which concrete example, worked case, or source scene shows the mechanism in operation;
+- which counterexample, limitation, or boundary prevents the claim from being over-generalized;
 - what reusable judgment framework can be taken away.
 
-The body must read like an original explanatory blog article. Do not keep the reader outside the material by repeatedly saying "the video says", "the speaker says", "the document says", "at the beginning of the video", or "this section concludes". Convert the source material into an article argument: open with the core tension, build mechanisms, bring in examples at the right moment, and place the local conclusion after the reasoning has earned it.
+The body must read like an original explanatory blog article and a strong student's study notes at the same time. Do not keep the reader outside the material by repeatedly saying "the video says", "the speaker says", "the document says", "at the beginning of the video", or "this section concludes". Convert the source material into an article argument: open with the core tension, establish an intuitive model, build mechanisms, bring in examples at the right moment, test the claim against boundaries, and place the local takeaway after the reasoning has earned it.
 
 Prefer concentration over front-loading. Do not spend a large share of the note on a "观点卡片", "阅读导航", "背景问题", "值得先问的问题", or other preface material. The title metadata is enough for source facts. The article should quickly enter the substantive argument.
 
@@ -175,10 +178,12 @@ Use the following top-level headings:
 ```markdown
 # 材料标题：xxx
 
-## 1. 主体正文：按 Blog 方式重构源材料内容
+## 1. 主体正文：<用这份材料的真实主线命名>
 
 ## 2. 判断框架与结论
 ```
+
+The stable contract is the `1. 主体正文` prefix, not the literal phrase "按 Blog 方式重构源材料内容". Prefer a content-specific subtitle such as `从三个迁移理解 AI 下半场`. Existing DeepNotes that use the older literal heading remain valid.
 
 The header under the title should include:
 
@@ -233,6 +238,32 @@ Each subsection should generally explain:
 4. the supporting example, table, diagram, code, formula, data, source figure, page evidence, or key video scene;
 5. how this part supports the main thesis;
 6. how it transitions to the next part.
+
+Treat the following as an editorial learning-unit checklist, not as seven mandatory visible subheadings or a repeated card template:
+
+1. `认知问题`: what confusion or decision the reader is trying to resolve;
+2. `直觉解释`: a concrete mental model before formal terminology;
+3. `机制拆解`: the causal chain, architecture, process, formula, or variable relationship;
+4. `具体例子`: a worked case, source scene, data point, code path, or real decision;
+5. `反例 / 边界`: when the claim fails, becomes unsafe, or should not be generalized;
+6. `迁移场景`: how the idea changes a judgment, workflow, or decision elsewhere;
+7. `记忆钩子`: one concise sentence worth remembering when it improves review value.
+
+Do not mechanically force all seven items into every subsection. A simple source-backed point may need only a problem, mechanism, and example. A dense or consequential claim should normally include a worked example and a boundary. If the source does not support a real example or limitation, keep the subsection concise or mark the evidence gap; never invent one to complete the template.
+
+When these learning elements deserve visual emphasis, the HTML renderer supports the following optional semantic blocks. They are editorial tools, not required decorations:
+
+```html
+<aside class="worked-example"><strong>例子</strong><span>把抽象机制走一遍，写清输入、过程与结果。</span></aside>
+
+<aside class="boundary-note"><strong>边界</strong><span>说明结论失效、变得危险或不能外推的条件。</span></aside>
+
+<aside class="memory-line"><strong>记住</strong><span>一句能够帮助复习和迁移的内容特定判断。</span></aside>
+
+<div class="formula-card"><code>公式或变量关系</code><span>变量含义与使用条件。</span></div>
+```
+
+Use these blocks only after the surrounding prose has established the idea. The block must add information that is difficult to scan in prose; it must not repeat the preceding paragraph. A memory line must be content-specific and should compress a real relationship, distinction, or decision rule. Generic slogans such as “要具体问题具体分析” add no learning value and should be omitted.
 
 Use more prose than bullet lists. Lists are allowed, but the section should read like an article, not a material dump.
 
@@ -350,6 +381,9 @@ For reviewed keyframes, include why the asset matters:
 - Do not use regex-only cleanup or global substitutions as a substitute for semantic rewriting. If a passage reads awkwardly after cleanup, rewrite the sentence.
 - Do not front-load conclusions in every subsection. Build the reasoning first, then close with the local takeaway.
 - Do not compress every subsection into the same short template. Dense parts should expand into several paragraphs with mechanism, example, implication, and transition.
+- For a dense or consequential claim, actively look for a source-backed worked example and a real boundary, counterexample, or failure condition. If neither exists in the source, do not fabricate them and do not disguise an evidence gap as certainty.
+- Use `worked-example`, `boundary-note`, `memory-line`, and `formula-card` only when they improve scanning or review. Never repeat the same four-card pattern in every subsection.
+- A memory hook must preserve a content-specific relationship or decision rule. It is not a motivational slogan and must not duplicate the local conclusion.
 - Do not leave `deep_note.md` as pure prose when useful assets exist. Include contextual anchors for selected keyframes, generated diagrams, tables, screenshots, quote cards, formulas, code, or other renderer-consumable materials.
 - Do not put asset anchors only near the opening or in an appendix. Spread them where they support the surrounding argument, especially inside `## 1. 主体正文`.
 - Do not use keyframes as page decoration. If a keyframe has no evidence value, skip it or replace it with a better structural/comparison/concept asset.

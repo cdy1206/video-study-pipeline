@@ -27,7 +27,10 @@ def replace_asset_refs(text: str, assets_dir: Path) -> str:
             continue
         rel = asset.relative_to(assets_dir).as_posix()
         embedded = data_url(asset)
-        for ref in (f"./assets/{rel}", f"assets/{rel}", f"/assets/{rel}"):
+        # Replace absolute and explicitly relative forms before the bare
+        # substring. Otherwise `/assets/x` becomes `/data:...` and breaks
+        # file:// images even though the bytes were embedded successfully.
+        for ref in (f"/assets/{rel}", f"./assets/{rel}", f"assets/{rel}"):
             text = text.replace(ref, embedded)
     return text
 

@@ -117,6 +117,38 @@ class DeepNoteBlogStyleCheckerTests(unittest.TestCase):
         self.assertTrue(report["checks"]["required_h2_present"])
         self.assertTrue(report["passed"])
 
+    def test_allows_content_specific_body_heading_and_reports_v4_blocks(self) -> None:
+        text = """# 材料标题：测试
+
+## 1. 主体正文：从三个迁移理解 AI 下半场
+
+### 1.1 规模扩张只有在约束改变时才会产生新能力
+
+参数变多本身不是答案。只有数据、训练目标和推理时预算同时改变，系统才可能从模式拟合迁移到可复用的任务过程。
+
+<aside class="worked-example"><strong>例子</strong><span>同一个任务在固定推理预算与动态推理预算下会得到不同的搜索深度。</span></aside>
+
+<aside class="boundary-note"><strong>边界</strong><span>如果反馈信号本身错误，增加推理预算只会更稳定地优化错误目标。</span></aside>
+
+| 变量 | 作用 |
+| --- | --- |
+| 推理预算 | 控制搜索深度 |
+| 反馈信号 | 决定优化方向 |
+
+## 2. 判断框架与结论
+
+1. 先检查约束是否改变，再判断规模是否带来能力迁移。
+"""
+        tmpdir = Path(tempfile.mkdtemp(prefix="deepnote-checker-test-"))
+        note = tmpdir / "content_specific_heading.md"
+        note.write_text(text, encoding="utf-8")
+        report = checker.check(note)
+        self.assertTrue(report["checks"]["required_h2_present"])
+        self.assertEqual(report["asset_counts"]["v4_semantic_blocks"]["worked_examples"], 1)
+        self.assertEqual(report["asset_counts"]["v4_semantic_blocks"]["boundary_notes"], 1)
+        self.assertTrue(report["semantic_review"]["required"])
+        self.assertTrue(report["passed"])
+
     def test_allows_non_video_source_figures_without_keyframes(self) -> None:
         note = write_note(
             """### 3.1 PDF 图表是证据，不需要伪造视频关键帧
