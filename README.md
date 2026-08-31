@@ -4,7 +4,7 @@
 
 **把长视频变成一份能快速读懂、随时查证、方便复习的图文笔记。**
 
-Turn long videos into illustrated notes with searchable text, subtitles, and links back to the source.
+Turn long videos into illustrated notes, printable PDFs, and presentation-ready pages.
 
 ![Agent Skill](https://img.shields.io/badge/Agent%20Skill-video--study--pipeline-0f766e)
 ![Input](https://img.shields.io/badge/Input-Bilibili%20%7C%20YouTube%20%7C%20Text-b45309)
@@ -14,7 +14,7 @@ Turn long videos into illustrated notes with searchable text, subtitles, and lin
 
 </div>
 
-> 这不是“字幕摘要器”。它会保留字幕、时间戳和有用画面，再把视频整理成一篇能读懂、能复习、也能随时跳回原片核对的图文笔记。
+> 这不是只列几条结论的摘要器。它会保留重要论证、例子和画面，再把视频整理成一份能快速阅读、方便复习、也能随时回到原片核对的学习笔记。
 
 ## 目录
 
@@ -27,8 +27,7 @@ Turn long videos into illustrated notes with searchable text, subtitles, and lin
 - [安装](#安装)
 - [运行环境](#运行环境)
 - [使用示例](#使用示例)
-- [输出与目录](#输出与目录)
-- [开发与验证](#开发与验证)
+- [文件保存位置](#文件保存位置)
 - [项目状态与许可证](#项目状态与许可证)
 
 ## 为什么需要它
@@ -38,10 +37,10 @@ Turn long videos into illustrated notes with searchable text, subtitles, and lin
 - **更快学习**：把线性视频重构为适合扫读和精读的长文笔记。
 - **少丢信息**：保留机制、例子、反例、公式、代码、时间戳和来源锚点，而不只列摘要。
 - **图文协同**：在正文需要的位置加入关键帧、Mermaid 架构图、表格、公式和代码块。
-- **随时回溯**：HTML 中的原片入口、章节定位和字幕让结论可以被核对。
+- **随时回溯**：HTML 中的原片入口和章节定位让重要内容可以被核对。
 - **一份内容，多种交付**：同一来源可以输出交互式图文笔记、打印版或演示页，也可以自由组合。
 
-它适合课程、访谈、播客、技术分享、行业分析和长篇知识视频，也可以接收已有 ASR、演讲稿、会议记录、文章、网页或 PDF。
+它适合课程、访谈、播客、技术分享、行业分析和长篇知识视频，也可以处理演讲稿、会议记录、文章、网页或 PDF。
 
 ## 效果预览
 
@@ -58,8 +57,8 @@ Turn long videos into illustrated notes with searchable text, subtitles, and lin
       <br><sub><b>图文精读</b>：画面和结构图放在它们真正解释的段落旁边。</sub>
     </td>
     <td width="50%">
-      <img src="docs/images/player.webp" alt="原片回溯播放器：整理字幕、逐字字幕、倍速、跳转与专注模式">
-      <br><sub><b>原片回溯</b>：遇到疑问，直接查看对应片段和两种字幕。</sub>
+      <img src="docs/images/player.webp" alt="原片回溯播放器：倍速、跳转、全屏与专注模式">
+      <br><sub><b>原片回溯</b>：遇到疑问，直接查看对应视频片段。</sub>
     </td>
   </tr>
 </table>
@@ -74,48 +73,40 @@ Turn long videos into illustrated notes with searchable text, subtitles, and lin
 - 关键画面、关系图、表格、公式和代码放在真正需要它们的位置。
 - 左侧阅读路径、全文搜索、书签、阅读进度和本地个人笔记。
 - 本地播放器支持定位回放、前后 10 秒、倍速、音量、全屏和专注模式。
-- `整理字幕` 与 `逐字字幕` 两种模式，可在理解和核对之间切换。
-- 章节时间用于阅读定位，每章默认只保留一个最强原片证据入口，避免重复播放按钮。
+- 点击重点段落即可回到原片对应位置，快速核对上下文。
 
 ### 打印版学习笔记（PDF）
 
-适合打印、归档和离线批注。可选择：
-
-- **网页排版版**：保持 HTML 图文笔记的阅读顺序和视觉风格。
-- **专业排印版（LaTeX）**：保持深度稿的章节顺序，提供更稳定的打印排版。
+适合打印、归档和离线批注，保留正文中的关键图片、图表、公式与章节结构。
 
 ### 演示页（Presentation）
 
 适合演示或录屏的 16:9 网页。它会重新组织叙事、场景与视觉资产，而不是把长文分页复制过去。
 
-### 可继续编辑的源材料
-
-每次运行会保留可继续加工的内容底座：
-
-- `unified_source.md`：清洗后的统一源材料。
-- `source_manifest.json`：提取方式、来源与限制。
-- `deep_note.md`：已经按文章逻辑重写的深度稿。
-- `asset_manifest.json`：封面、关键帧、图表和视觉用途。
-- 每种输出独立的内容组织与排版计划。
-
 ## 30 秒开始使用
 
-安装完成后，在新的 Agent 任务中输入：
+### 1. 安装
+
+在终端运行：
+
+```bash
+python3 \
+  "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
+  --repo cdy1206/video-study-pipeline \
+  --path video-study-pipeline \
+  --method git
+```
+
+### 2. 开始使用
+
+重新打开一个 Codex 任务，直接输入：
 
 ```text
 使用 $video-study-pipeline 解读这个视频，只输出 HTML：
 https://www.bilibili.com/video/BVxxxxxxxxxx
 ```
 
-也可以直接指定组合输出：
-
-```text
-使用 $video-study-pipeline 深度解读这个 YouTube 视频，输出 HTML + PDF。
-没有可用字幕时先完整 ASR，再写学习笔记；关键帧按默认策略自动选择。
-https://www.youtube.com/watch?v=xxxxxxxxxxx
-```
-
-默认交付到：
+完成后可以在这里找到成品：
 
 ```text
 ~/Downloads/视频解读/<video-id>-<video-title>/
@@ -125,44 +116,28 @@ https://www.youtube.com/watch?v=xxxxxxxxxxx
 
 | 能力 | 具体行为 |
 | --- | --- |
-| 来源获取 | 识别 Bilibili / YouTube 链接、分 P、字幕、封面与时长；无字幕时按配置进入 ASR。 |
-| 整理内容 | 将长材料写成连贯的文章，保留机制、例子、边界与可迁移的方法。 |
-| 安排图表 | 对比优先表格，流程与架构优先关系图，原始画面证据使用经过检查的关键帧。 |
-| 回到原片 | 通过时间戳、字幕和原片片段把笔记中的结论连接回原视频。 |
-| 三种成品 | 交互式图文笔记、打印版和演示页各自拥有独立的内容组织与视觉设计。 |
-| 本地交付 | 产物、字幕、音视频与运行资产默认保存在本机，不进入本仓库。 |
-| 质量把关 | 检查文章质量、图文关系、坏图、字幕覆盖、播放器结构和打印效果。 |
+| 快速读懂 | 把线性视频重写为可扫读、可精读的文章，保留机制、例子、边界与可迁移方法。 |
+| 图文解释 | 对比内容用表格，流程与架构用关系图，重要画面放在对应正文旁边。 |
+| 回到原片 | 点击重点内容即可播放对应片段，不必重新拖动整段视频寻找上下文。 |
+| 三种成品 | 可单独或组合输出 HTML、PDF 和 Presentation。 |
+| 本地使用 | 成品默认保存在本机，断网后仍可阅读已经生成的文件。 |
+| 自动检查 | 交付前检查文章结构、图文关系、坏图、播放器和打印效果。 |
 
 ## 工作流程
 
 ```mermaid
-flowchart TD
-    A[视频链接 / ASR / 文章 / 网页 / PDF] --> B[输入适配与元数据探测]
-    B --> C{有可用字幕或正文吗}
-    C -->|有| D[清洗并保留时间戳与来源]
-    C -->|无字幕的视频| E[获取音频并完整 ASR]
-    D --> F[unified_source + source_manifest]
-    E --> F
-    F --> G[分段分析与知识重构]
-    G --> H[deep_note.md]
-    H --> I[视觉表达规划]
-    I --> J[图表与关键画面清单]
-    J --> K{选择输出模式}
-    K --> L[交互式图文笔记]
-    K --> M[打印版学习笔记]
-    K --> N[演示网页]
-    L --> O[内容召回与渲染审校]
-    M --> O
-    N --> O
-    O --> P[按视频独立归档]
+flowchart LR
+    A[提供视频链接] --> B[提取内容与重要画面]
+    B --> C[重写为易读的学习笔记]
+    C --> D[配置图表、公式与关键画面]
+    D --> E{选择成品}
+    E --> F[HTML]
+    E --> G[PDF]
+    E --> H[Presentation]
+    F --> I[自动检查并保存到本机]
+    G --> I
+    H --> I
 ```
-
-关键设计原则：
-
-1. `deep_note.md` 是统一内容底座，不是最终成品。
-2. `asset_manifest.json` 是视觉与证据契约，不是读者要看的“资产附录”。
-3. 图文笔记、打印版和演示页必须分别增强，禁止仅做格式转换。
-4. 任何重要结论都应尽可能保留来源锚点；无法从材料支持的内容不应被补造。
 
 ## 安装
 
@@ -226,7 +201,7 @@ cp -R "$tmpdir/repo/video-study-pipeline/." \
 
 ### 其他 AI 编程工具
 
-如果客户端原生支持 Agent Skills，将 `video-study-pipeline/` 放入它规定的 Skill 目录。如果不支持，可以让 Agent 先读取 `video-study-pipeline/SKILL.md`，再按其中的 references 与 scripts 执行。后者属于手动兼容模式，不保证客户端具备浏览器、ASR、LaTeX 或本地文件预览能力。
+如果客户端原生支持 Agent Skills，将 `video-study-pipeline/` 放入它规定的 Skill 目录。如果不支持，可以让 Agent 先读取 `video-study-pipeline/SKILL.md`，再按其中的说明执行。不同客户端支持的功能可能有所不同。
 
 ### 更新
 
@@ -253,27 +228,7 @@ Claude Code 或 Cursor 的手动安装可以采用相同的“先改名备份，
 - Python 3
 - 能运行 Agent Skills 的 AI 编程客户端
 
-### 按输入和输出按需安装
-
-| 工具 | 何时需要 |
-| --- | --- |
-| `yt-dlp` | 下载平台字幕、音频或视频流。 |
-| `ffmpeg` / `ffprobe` | 音视频探测、抽帧、转码和 ASR 音频准备。 |
-| ASR 后端 | 平台无可用字幕且需要完整转写时。可以是 Whisper 或其他可输出时间戳的服务。 |
-| Node.js | 组装和生成交互式图文笔记。 |
-| Chromium / Chrome | 本地 HTML 验收、打印 PDF 或自动化截图。 |
-| LaTeX | 选择 LaTeX PDF 路线时。 |
-
-快速检查：
-
-```bash
-python3 --version
-node --version
-ffmpeg -version
-yt-dlp --version
-```
-
-缺少某个可选依赖时，Skill 应先报告具体缺口，再选择有证据的回退路线；不能把“没有字幕”直接当作“无法解读”。
+根据视频来源和选择的成品，运行时可能还会使用 `yt-dlp`、`ffmpeg`、Node.js 或 Chromium。缺少依赖时，Skill 会先说明需要安装什么；完整环境说明见 [使用说明](docs/quality-and-troubleshooting.md)。
 
 ## 使用示例
 
@@ -281,7 +236,6 @@ yt-dlp --version
 
 ```text
 使用 $video-study-pipeline 解读这个视频，只输出 HTML。
-按默认策略自动抽帧；正文要有表格、Mermaid 和来源回溯。
 <video-url>
 ```
 
@@ -289,7 +243,6 @@ yt-dlp --version
 
 ```text
 使用 $video-study-pipeline 深度解读这个视频，输出 HTML + PDF。
-HTML 做成交互式图文笔记；PDF 使用专业排印版，并保持深度稿的章节顺序。
 <video-url>
 ```
 
@@ -297,7 +250,6 @@ HTML 做成交互式图文笔记；PDF 使用专业排印版，并保持深度�
 
 ```text
 使用 $video-study-pipeline 解读这个视频，只输出 Presentation。
-先生成 storyboard，再按 16:9 场景重组，不要把长文直接分页。
 <video-url>
 ```
 
@@ -309,82 +261,17 @@ HTML 做成交互式图文笔记；PDF 使用专业排印版，并保持深度�
 <video-url>
 ```
 
-### 复用已有字幕或 DeepNote
-
-```text
-使用 $video-study-pipeline 处理这个本地目录。
-复用已有字幕和视频资产，从 deep_note.md 开始重新生成 HTML。
-<local-folder>
-```
-
-## 输出与目录
+## 文件保存位置
 
 推荐的最终目录：
 
 ```text
 ~/Downloads/视频解读/
-└── <video-id>-<safe-title>/
-    ├── <safe-title>.html
-    ├── <safe-title>.pdf                 # 仅在选择 PDF 时
-    ├── <safe-title>-presentation.html   # 仅在选择 Presentation 时
-    ├── deep_note.md
-    ├── metadata.json
-    ├── assets/
-    │   ├── asset_manifest.json
-    │   ├── cover.*
-    │   ├── keyframes/
-    │   ├── diagrams/
-    │   ├── subtitles/
-    │   └── media/                       # 可选，本地源视频/音频
-    └── presentation/                    # 可选，演示工程
+└── <video-id>-<video-title>/
+    ├── <video-title>.html                 # 选择 HTML 时
+    ├── <video-title>.pdf                  # 选择 PDF 时
+    └── <video-title>-presentation.html    # 选择 Presentation 时
 ```
-
-仓库自身结构：
-
-```text
-video-study-pipeline/
-├── SKILL.md                    # 端到端规则与决策边界
-├── agents/openai.yaml          # Codex UI 元数据
-├── assets/                     # HTML/CSS/JS 与共享视觉资源
-├── references/                 # 写作、视觉、渲染与质量规范
-└── scripts/                    # 校验、组装、渲染与打包工具
-```
-
-## 开发与验证
-
-克隆仓库：
-
-```bash
-git clone https://github.com/cdy1206/video-study-pipeline.git
-cd video-study-pipeline
-```
-
-运行 Skill 结构校验：
-
-```bash
-python3 \
-  "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" \
-  video-study-pipeline
-```
-
-运行 DeepNote checker 测试：
-
-```bash
-python3 video-study-pipeline/scripts/test_check_deep_note_blog_style.py
-```
-
-运行 Python 语法检查：
-
-```bash
-python3 -m py_compile video-study-pipeline/scripts/*.py
-```
-
-贡献时请保持以下边界：
-
-- 一个 PR 解决一个清晰问题。
-- 新增规则要说明它防止了什么真实失败，而不是继续堆叠模板句。
-- 修改 renderer 时同时补充结构检查或最小复现样例。
-- 不提交受版权保护的视频媒体、账号凭据和个人生成产物。
 
 ## 项目状态与许可证
 
