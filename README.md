@@ -2,9 +2,9 @@
 
 <div align="center">
 
-**把长视频变成可阅读、可检索、可回溯原片的多模态学习材料。**
+**把长视频变成一份能快速读懂、随时查证、方便复习的图文笔记。**
 
-Source-backed video study notes for Bilibili, YouTube, transcripts, articles, webpages, and PDFs.
+Turn long videos into illustrated notes with searchable text, subtitles, and links back to the source.
 
 ![Agent Skill](https://img.shields.io/badge/Agent%20Skill-video--study--pipeline-0f766e)
 ![Input](https://img.shields.io/badge/Input-Bilibili%20%7C%20YouTube%20%7C%20Text-b45309)
@@ -13,11 +13,12 @@ Source-backed video study notes for Bilibili, YouTube, transcripts, articles, we
 
 </div>
 
-> 这不是“字幕摘要器”。它先保留字幕、时间戳、关键帧和来源关系，再进行知识重构、视觉规划和多端渲染；读者既能快速阅读，也能从任意重点跳回原片核对。
+> 这不是“字幕摘要器”。它会保留字幕、时间戳和有用画面，再把视频整理成一篇能读懂、能复习、也能随时跳回原片核对的图文笔记。
 
 ## 目录
 
 - [为什么需要它](#为什么需要它)
+- [效果预览](#效果预览)
 - [最终能得到什么](#最终能得到什么)
 - [30 秒开始使用](#30-秒开始使用)
 - [核心能力](#核心能力)
@@ -35,48 +36,68 @@ Source-backed video study notes for Bilibili, YouTube, transcripts, articles, we
 
 普通视频总结通常只保留几个结论，代价是丢失论证过程、例子、边界条件和画面证据。Video Study Pipeline 的目标不同：
 
-- **更快学习**：把线性视频重构为适合扫读和精读的 Blog 型讲义。
+- **更快学习**：把线性视频重构为适合扫读和精读的长文笔记。
 - **少丢信息**：保留机制、例子、反例、公式、代码、时间戳和来源锚点，而不只列摘要。
 - **图文协同**：在正文需要的位置加入关键帧、Mermaid 架构图、表格、公式和代码块。
 - **随时回溯**：HTML 中的原片入口、章节定位和字幕让结论可以被核对。
-- **一份内容，多种交付**：同一来源可以输出 HTML、PDF、Presentation，或任意组合。
+- **一份内容，多种交付**：同一来源可以输出交互式图文笔记、打印版或演示页，也可以自由组合。
 
 它适合课程、访谈、播客、技术分享、行业分析和长篇知识视频，也可以接收已有 ASR、演讲稿、会议记录、文章、网页或 PDF。
 
+## 效果预览
+
+<p align="center">
+  <img src="docs/images/overview.webp" alt="图文笔记首页：展示视频标题、核心观点、时长、章节和阅读入口" width="100%">
+</p>
+
+<p align="center"><sub>先用一屏说明视频在讲什么，再决定精读正文或返回原片。</sub></p>
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/images/reading.webp" alt="正文阅读页：左侧章节目录，右侧正文、关键帧和结构图">
+      <br><sub><b>图文精读</b>：画面和结构图放在它们真正解释的段落旁边。</sub>
+    </td>
+    <td width="50%">
+      <img src="docs/images/player.webp" alt="原片回溯播放器：整理字幕、逐字字幕、倍速、跳转与专注模式">
+      <br><sub><b>原片回溯</b>：遇到疑问，直接查看对应片段和两种字幕。</sub>
+    </td>
+  </tr>
+</table>
+
 ## 最终能得到什么
 
-### V4 多模态学习 HTML
+### 交互式图文笔记（HTML）
 
 默认推荐的阅读形态，适合替代大部分“先完整看一遍视频”的场景：
 
-- Blog 型正文，不是逐段转述或固定模板摘要。
-- 关键帧、Mermaid、表格、公式和代码按语义嵌入正文。
+- 正文按文章逻辑重新组织，不是逐段转述或固定模板摘要。
+- 关键画面、关系图、表格、公式和代码放在真正需要它们的位置。
 - 左侧阅读路径、全文搜索、书签、阅读进度和本地个人笔记。
 - 本地播放器支持定位回放、前后 10 秒、倍速、音量、全屏和专注模式。
 - `整理字幕` 与 `逐字字幕` 两种模式，可在理解和核对之间切换。
 - 章节时间用于阅读定位，每章默认只保留一个最强原片证据入口，避免重复播放按钮。
 
-### PDF 深度讲义
+### 打印版学习笔记（PDF）
 
 适合打印、归档和离线批注。可选择：
 
-- DeepNote 文章式 PDF。
-- DeepNote LaTeX PDF。
-- 与 `wdkns` 官方逻辑兼容的 LaTeX 课程讲义。
+- **网页排版版**：保持 HTML 图文笔记的阅读顺序和视觉风格。
+- **专业排印版（LaTeX）**：保持深度稿的章节顺序，提供更稳定的打印排版。
 
-### Web Presentation
+### 演示页（Presentation）
 
 适合演示或录屏的 16:9 网页。它会重新组织叙事、场景与视觉资产，而不是把长文分页复制过去。
 
-### 可审计的中间资产
+### 可继续编辑的源材料
 
 每次运行会保留可继续加工的内容底座：
 
 - `unified_source.md`：清洗后的统一源材料。
 - `source_manifest.json`：提取方式、来源与限制。
-- `deep_note.md`：Blog 型知识重构稿。
+- `deep_note.md`：已经按文章逻辑重写的深度稿。
 - `asset_manifest.json`：封面、关键帧、图表和视觉用途。
-- renderer brief：每种输出独立的组织与视觉计划。
+- 每种输出独立的内容组织与排版计划。
 
 ## 30 秒开始使用
 
@@ -91,7 +112,7 @@ https://www.bilibili.com/video/BVxxxxxxxxxx
 
 ```text
 使用 $video-study-pipeline 深度解读这个 YouTube 视频，输出 HTML + PDF。
-没有可用字幕时先完整 ASR，再写讲义；关键帧按默认策略自动选择。
+没有可用字幕时先完整 ASR，再写学习笔记；关键帧按默认策略自动选择。
 https://www.youtube.com/watch?v=xxxxxxxxxxx
 ```
 
@@ -106,12 +127,12 @@ https://www.youtube.com/watch?v=xxxxxxxxxxx
 | 能力 | 具体行为 |
 | --- | --- |
 | 来源获取 | 识别 Bilibili / YouTube 链接、分 P、字幕、封面与时长；无字幕时按配置进入 ASR。 |
-| 知识重构 | 将长材料写成连贯的 Blog 型讲义，保留机制、例子、边界与迁移场景。 |
-| 视觉规划 | 对比优先表格，流程与架构优先 Mermaid，原始画面证据使用经过检查的关键帧。 |
-| 来源回溯 | 通过时间戳、字幕和 source clip 把讲义结论连接回原视频。 |
-| 多渲染器 | HTML、PDF、Presentation 各自拥有独立的内容组织、视觉密度与质量门禁。 |
+| 整理内容 | 将长材料写成连贯的文章，保留机制、例子、边界与可迁移的方法。 |
+| 安排图表 | 对比优先表格，流程与架构优先关系图，原始画面证据使用经过检查的关键帧。 |
+| 回到原片 | 通过时间戳、字幕和原片片段把笔记中的结论连接回原视频。 |
+| 三种成品 | 交互式图文笔记、打印版和演示页各自拥有独立的内容组织与视觉设计。 |
 | 本地交付 | 产物、字幕、音视频与运行资产默认保存在本机，不进入本仓库。 |
-| 质量审校 | 检查 DeepNote 风格、资产消费、坏图、字幕覆盖、播放器结构和 PDF 渲染。 |
+| 质量把关 | 检查文章质量、图文关系、坏图、字幕覆盖、播放器结构和打印效果。 |
 
 ## 工作流程
 
@@ -126,11 +147,11 @@ flowchart TD
     F --> G[分段分析与知识重构]
     G --> H[deep_note.md]
     H --> I[视觉表达规划]
-    I --> J[asset_manifest + reviewed assets]
+    I --> J[图表与关键画面清单]
     J --> K{选择输出模式}
-    K --> L[V4 学习 HTML]
-    K --> M[PDF 深度讲义]
-    K --> N[Web Presentation]
+    K --> L[交互式图文笔记]
+    K --> M[打印版学习笔记]
+    K --> N[演示网页]
     L --> O[内容召回与渲染审校]
     M --> O
     N --> O
@@ -141,7 +162,7 @@ flowchart TD
 
 1. `deep_note.md` 是统一内容底座，不是最终成品。
 2. `asset_manifest.json` 是视觉与证据契约，不是读者要看的“资产附录”。
-3. HTML、PDF、Presentation 必须分别增强，禁止仅做格式转换。
+3. 图文笔记、打印版和演示页必须分别增强，禁止仅做格式转换。
 4. 任何重要结论都应尽可能保留来源锚点；无法从材料支持的内容不应被补造。
 
 ## 安装
@@ -240,7 +261,7 @@ Claude Code 或 Cursor 的手动安装可以采用相同的“先改名备份，
 | `yt-dlp` | 下载平台字幕、音频或视频流。 |
 | `ffmpeg` / `ffprobe` | 音视频探测、抽帧、转码和 ASR 音频准备。 |
 | ASR 后端 | 平台无可用字幕且需要完整转写时。可以是 Whisper 或其他可输出时间戳的服务。 |
-| Node.js | V3/V4 HTML 数据组装与渲染脚本。 |
+| Node.js | 组装和生成交互式图文笔记。 |
 | Chromium / Chrome | 本地 HTML 验收、打印 PDF 或自动化截图。 |
 | LaTeX | 选择 LaTeX PDF 路线时。 |
 
@@ -269,7 +290,7 @@ yt-dlp --version
 
 ```text
 使用 $video-study-pipeline 深度解读这个视频，输出 HTML + PDF。
-PDF 使用 DeepNote LaTeX 路线，HTML 使用 V4 多模态学习页。
+HTML 做成交互式图文笔记；PDF 使用专业排印版，并保持深度稿的章节顺序。
 <video-url>
 ```
 
@@ -325,7 +346,7 @@ PDF 使用 DeepNote LaTeX 路线，HTML 使用 V4 多模态学习页。
 video-study-pipeline/
 ├── SKILL.md                    # 端到端规则与决策边界
 ├── agents/openai.yaml          # Codex UI 元数据
-├── assets/                     # HTML/CSS/JS 与 LaTeX 模板
+├── assets/                     # HTML/CSS/JS 与共享视觉资源
 ├── references/                 # 写作、视觉、渲染与质量规范
 └── scripts/                    # 校验、组装、渲染与打包工具
 ```
@@ -453,7 +474,7 @@ python3 -m py_compile video-study-pipeline/scripts/*.py
 
 ## 项目状态与许可证
 
-当前版本以 **视频输入 + V4 多模态学习 HTML** 为最成熟主路径；PDF、Presentation 和非视频输入已经纳入统一架构，但实际效果仍依赖本机工具链与来源质量。
+当前版本以 **视频输入 + 交互式图文笔记** 为最成熟主路径；PDF、演示网页和非视频输入已经纳入统一架构，但实际效果仍依赖本机工具链与来源质量。
 
 本仓库目前**尚未包含明确的开源许可证**。在许可证文件加入之前，默认版权规则仍然适用；这意味着公开可见不等于获得复制、修改、分发或商业使用授权。如果你希望在自己的项目中分发或商用，请先通过 GitHub Issue 联系仓库所有者确认授权。
 

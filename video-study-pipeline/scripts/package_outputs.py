@@ -57,13 +57,12 @@ def main() -> int:
     parser.add_argument("--video-id", default="", help="BVID, YouTube id, or another stable id.")
     parser.add_argument("--html", type=Path, help="Path to final HTML output.")
     parser.add_argument("--pdf", type=Path, help="Path to final PDF output.")
-    parser.add_argument("--tex", type=Path, help="Path to final LaTeX source for a PDF lecture note.")
+    parser.add_argument("--tex", type=Path, help="Path to final LaTeX source for a DeepNote PDF.")
     parser.add_argument("--deep-note", type=Path, help="Path to the shared deep_note.md content base.")
     parser.add_argument("--subtitle", type=Path, help="Path to final timestamped SRT/VTT transcript.")
     parser.add_argument("--asset-manifest", type=Path, help="Path to assets/asset_manifest.json or .md.")
     parser.add_argument("--asset-dir", type=Path, help="Path to the reviewed article/PDF asset directory.")
     parser.add_argument("--renderer-report", type=Path, help="Path to renderer_report.json.")
-    parser.add_argument("--official-alignment-report", type=Path, help="Path to official_alignment_report.json.")
     parser.add_argument("--review-file", type=Path, action="append", default=[], help="Path to a visual review file to copy under review/. May be repeated.")
     parser.add_argument("--presentation", type=Path, help="Path to runnable presentation project directory.")
     parser.add_argument("--presentation-html", type=Path, help="Path to flattened presentation HTML export.")
@@ -83,7 +82,6 @@ def main() -> int:
             args.asset_manifest,
             args.asset_dir,
             args.renderer_report,
-            args.official_alignment_report,
             *args.review_file,
             args.presentation,
             args.presentation_html,
@@ -92,7 +90,7 @@ def main() -> int:
         parser.error(
             "Provide at least one output: --html, --pdf, --tex, --deep-note, "
             "--subtitle, --asset-manifest, --asset-dir, --renderer-report, "
-            "--official-alignment-report, --review-file, --presentation, or --presentation-html."
+            "--review-file, --presentation, or --presentation-html."
         )
 
     title = safe_name(args.title)
@@ -126,10 +124,6 @@ def main() -> int:
         dst = out_dir / "renderer_report.json"
         planned.append((args.renderer_report, dst))
         outputs["renderer_report"] = str(dst)
-    if args.official_alignment_report:
-        dst = out_dir / "official_alignment_report.json"
-        planned.append((args.official_alignment_report, dst))
-        outputs["official_alignment_report"] = str(dst)
     planned_dirs: list[tuple[Path, Path]] = []
     if args.asset_dir:
         dst = out_dir / "assets"

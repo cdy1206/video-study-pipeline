@@ -1,6 +1,6 @@
-# V4 Learning Notes Content Profile
+# Learning Notes Content Profile
 
-Use this reference for the default article HTML content profile. V4 is a learning-note editorial layer built on the accepted V3 multimodal interaction shell. It is not a replacement frontend and it does not remove source traceability.
+Use this reference for the default article HTML content profile. The `V4` filename and compatibility fields are internal implementation labels only. Never expose them as the product name. Reader-facing labels should use plain language such as `交互式图文笔记`.
 
 ## Product Definition
 
@@ -85,8 +85,8 @@ New V4 plans should include this optional block:
 ```json
 "ui": {
   "product_version": "V4",
-  "brand_badge": "V4 学习笔记",
-  "title_suffix": "V4 学习笔记",
+  "brand_badge": "交互式图文笔记",
+  "title_suffix": "交互式图文笔记",
   "study_tab_label": "精读笔记",
   "humanize_asset_labels": true,
   "learning_note_style": true,
@@ -101,7 +101,7 @@ The sticky left reading path is the only chapter directory in the default V4 lay
 
 The assembler and renderer keep the model schema `v3-multimodal-study-model@1` for backward compatibility. New runs may name their editorial files `v4_editorial_plan.json` and `v4_study_model.json`; old V3 files remain valid. If the `ui` block is absent, the renderer must reproduce the original V3 labels and styling.
 
-## V4 QA
+## Learning-Note QA
 
 In addition to the V3 interaction QA:
 

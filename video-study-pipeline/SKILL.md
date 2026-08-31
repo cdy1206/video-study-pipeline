@@ -23,9 +23,7 @@ Before writing asset-aware `deep_note.md` sections or rendering any selected out
 
 The asset pool is an intermediate evidence layer, not a new visible article structure. It includes keyframes, cover, diagrams, tables/charts, keywords, glossary items, pull quotes, timelines, comparison cards, source anchors, and reader aids. Do not turn it into a front-loaded "asset table" in the final article unless the user explicitly asks for an audit appendix. Assets should be placed where they support the surrounding argument.
 
-PDF output has multiple families. Read `references/pdf-output-families.md` before rendering a PDF. The normal default output profile does not include PDF. When the user explicitly asks for PDF, the user's current default is an official-compatible LaTeX lecture handout based on `deep_note.md`, `asset_manifest.json`, and reviewed assets. Do not fall back to shallow subtitle-summary notes.
-
-Official-style PDF remains available, but only when selected or clearly implied. Official-style means compatible with the current `wdkns/wdkns-skills` `bilibili-render-pdf` / `youtube-render-pdf` logic, not merely "some LaTeX PDF". The official renderer must use an official-compatible `notes-template.tex`, put the original cover on the first page, include necessary high-value figures, place video-frame time provenance as same-page footnotes, and end major sections with `\subsection{本章小结}` unless the user explicitly requests a non-course-note format.
+PDF output has two families. Read `references/pdf-output-families.md` before rendering a PDF. The normal default output profile does not include PDF. When the user explicitly asks for PDF without naming a family, default to the DeepNote LaTeX PDF: preserve `deep_note.md` order, consume `asset_manifest.json` and reviewed assets, and optimize the result for printing. Use an article-derived PDF only when the user wants the printed file to retain the HTML appearance. Do not fall back to shallow subtitle-summary notes.
 
 When repairing or regenerating an output the user already likes, preserve the existing renderer structure and visual language. Add missing assets by minimally patching the existing LaTeX/Reacticle/presentation project. Do not replace a working Beautiful Article / PDF structure with a generic static HTML or a new template just to add assets.
 
@@ -35,7 +33,7 @@ Use a small adapter layer before `deep_note.md`. The adapter's job is to preserv
 
 | Input family | Adapter behavior | Must preserve |
 | --- | --- | --- |
-| Bilibili / YouTube / BV / watchlater | Current video route: metadata, subtitles or ASR, cover, keyframe candidates, chapters/parts. Reuse `wdkns`/platform subtitle logic when available. | Title, author, duration, URL/id, subtitle source, timestamps, cover, selected/skipped keyframes. |
+| Bilibili / YouTube / BV / watchlater | Current video route: metadata, subtitles or ASR, cover, keyframe candidates, chapters/parts. Reuse reliable platform-subtitle acquisition logic when available. | Title, author, duration, URL/id, subtitle source, timestamps, cover, selected/skipped keyframes. |
 | ASR transcript / speech draft / meeting notes | Clean speaker turns, timestamps if present, section boundaries, repeated/noisy text, and uncertain terms. Do not invent video keyframes if no media exists. | Speaker/source roles, claims, decisions, examples, action items, time or page anchors if present. |
 | Article / webpage / HTML | Extract main text and meaningful figures/tables. Remove navigation and boilerplate. Use Defuddle or browser extraction when available. | URL, title, author/date when available, headings, links, images, tables, code/formulas. |
 | PDF / slides / complex document | Extract text, page anchors, figures, tables, formulas, captions, and layout clues. Use the best available local extractor; Docling/MinerU are optional adapters, not required assumptions. | Page numbers, figure/table ids, captions, formulas, source images, reading order, extraction limitations. |
@@ -78,7 +76,7 @@ If the user explicitly requests a mode, proceed. If ambiguous, ask once.
 | "长文 HTML + 演示网页" | `article-and-presentation` | `<title>.html` and `presentation/` |
 | "全部都要", "完整链路", "all" | `all` | PDF, article HTML, and presentation output |
 
-For modes that include both PDF and article HTML, generate both from the shared `deep_note.md`, `asset_manifest.json`, and renderer-specific briefs. If the user wants the DeepNote/HTML form preserved, build article HTML first and export an article-derived PDF from that HTML after recording print adjustments in `pdf_render_brief.md`. If the user explicitly wants an official LaTeX handout, render the LaTeX PDF separately and do not let the HTML renderer replace that selected LaTeX renderer.
+For modes that include both PDF and article HTML, generate both from the shared `deep_note.md`, `asset_manifest.json`, and renderer-specific briefs. Build the article HTML independently. Render a DeepNote LaTeX PDF by default; export an article-derived PDF instead only when the user wants the PDF to preserve the HTML appearance. Do not treat either PDF as a raw format conversion.
 
 Presentation output is not a long-form article. Convert `deep_note.md` into `article.md` or equivalent source material, then create `script.md`, `outline.md`, and a scene-level storyboard before building the 16:9 presentation.
 
@@ -104,7 +102,7 @@ Choice groups:
 | 3. Depth and structure | Before segment analysis | depth level, section granularity, timestamp density, whether to keep dialogue snippets |
 | 4. Asset policy | Before asset extraction/generation | keyframe policy, generated diagrams, tables, cover, slide/PDF asset preservation, AI image use |
 | 5. Renderer enrichment | Before renderer briefs | key terms, pull quotes, contextual asset placement, per-output visual density, first-section review target |
-| 6. PDF renderer | Before PDF build | DeepNote article-derived PDF vs DeepNote LaTeX PDF vs official LaTeX lecture handout, figure density, appendix/audit section policy |
+| 6. PDF renderer | Before PDF build | Article-derived PDF vs DeepNote LaTeX PDF, figure density, appendix/audit section policy |
 | 7. Article renderer | Before Beautiful Article planning | article type, theme, width, image mode, cover, first-spread review requirement |
 | 8. Presentation renderer | Before presentation build | narration style, pacing, audio, voice, animation density, 16:9 scene treatment |
 | 9. Final delivery | Before final export/copy | export exact artifacts, overwrite policy, include asset manifest/review images, open for visual check |
@@ -145,8 +143,7 @@ When not in interactive choice mode, use learned user preferences as defaults bu
    - `deep_note.md` must place asset anchors in context and choose them by intent: `evidence` -> inspected keyframes/source images, `structure` -> Mermaid, and `comparison` -> tables/charts. Use selected keyframes as `【关键帧：asset_id，caption，source_time=xx:xx，intent=evidence，reason=...】`, tables as real Markdown tables or `【表格：table_id，caption，intent=comparison，reason=...】`, diagrams as Mermaid/source blocks or `【插图：diagram_id，caption，intent=structure，reason=...】`, and missing-but-needed visuals as `【截图建议：约 xx:xx，intent=evidence，...】`. Do not hide all assets in `asset_manifest.json` or leave them only for renderer guessing.
    - Keep the `deep_note.md` top-level output sections focused: a content-specific heading beginning with `1. 主体正文` and the exact `2. 判断框架与结论`. Do not add standalone `观点卡片`, `阅读导航`, `背景与问题`, `全文结构图`, `核心概念与术语`, or separate `总结` chapters. The title metadata can carry source facts; the body must carry the argument. Define key terms where they are first needed, place Mermaid diagrams/tables/keyframes/source figures inside the body near the argument they support, and fold final takeaways into the judgment/action framework. Do not mix Arabic and Chinese chapter numbering, do not output writing-rule sections as reader-facing chapters, and do not add a standalone final ASR/OCR/extraction limitations chapter. Older literal `按 Blog 方式重构...` headings remain compatible.
    - Use the V4 learning-unit checklist semantically: reader problem, intuition, mechanism, concrete example, boundary/counterexample, transfer, and a sparse memory hook. Do not expose all seven as mandatory headings or stamp the same cards into every subsection. Dense or consequential claims should normally include a source-backed worked example and boundary when available; if the source cannot support them, keep the section concise or state the evidence gap.
-   - For LaTeX PDF lecture notes, reconstruct teaching flow rather than mirroring subtitle order. Each major section should build motivation, main idea, mechanism, example/evidence, and takeaway where applicable.
-   - For LaTeX PDF lecture notes, end every major section with `\subsection{本章小结}`. Add `\subsection{拓展阅读}` only when one or two worthwhile external links genuinely help.
+   - For DeepNote LaTeX PDFs, preserve the audited Blog-style teaching flow and top-level section order. Improve print hierarchy and pagination without rewriting the document into a course-handout template.
    - In interactive choice mode, ask the Depth and structure choices before final segment analysis.
 
 4. Build the asset pool.
@@ -179,15 +176,14 @@ When not in interactive choice mode, use learned user preferences as defaults bu
 
 6. Render selected output(s).
    - Render from `deep_note.md`, `asset_manifest.json`, selected assets, and the renderer-specific brief. Do not render from `deep_note.md` alone unless the user explicitly requested a raw conversion.
-   - `pdf-only`: read `references/pdf-output-families.md`, use `pdf_render_brief.md`, and render the selected PDF family. For this user, when PDF is explicitly requested and no other PDF family is chosen, default to official-compatible LaTeX lecture handout based on `deep_note.md` and assets.
+   - `pdf-only`: read `references/pdf-output-families.md`, use `pdf_render_brief.md`, and render the selected PDF family. When PDF is explicitly requested and no family is chosen, default to a DeepNote LaTeX PDF based on `deep_note.md`, `asset_manifest.json`, and reviewed assets.
    - `article-html-only`: read `references/v4-learning-notes.md` and `references/v3-multimodal-html.md`, author `v4_editorial_plan.json` and `v4_study_model.json`, and render V4 learning-note content inside the accepted V3 multimodal interaction shell from `deep_note.md`, `asset_manifest.json`, selected assets, the full transcript, and `article_render_brief.md`. Keep the compatibility schema `v3-multimodal-study-model@1`. Map high-value paragraphs to focused source clips with explicit start/end times; do not attach every paragraph to a whole chapter.
    - `presentation-only`: use `presentation/storyboard.md`, `script.md`, and `outline.md`, then build a 16:9 `presentation/` project. Also create a `file://`-safe flattened HTML by inlining built CSS/JS/assets; Vite's default external module build is not sufficient for local double-click delivery.
-   - `pdf-and-article`: render a Beautiful Article HTML from `article_render_brief.md` and render the selected PDF family from `pdf_render_brief.md`. For this user's normal PDF default, render the official-compatible LaTeX handout separately over the same `deep_note.md` content and assets. Export an article-derived PDF only when the user explicitly asks to preserve the HTML/DeepNote visual style.
+   - `pdf-and-article`: render the article HTML from `article_render_brief.md` and render the selected PDF family from `pdf_render_brief.md`. Default to a separate DeepNote LaTeX PDF over the same content and assets. Export an article-derived PDF only when the user explicitly asks to preserve the HTML visual style.
    - `article-and-presentation`: render article HTML and create presentation from the shared content base plus their separate renderer briefs.
    - `all`: render article HTML, the selected PDF family, and presentation, each with its own brief.
    - For this user's article HTML, use the V4 learning-note content profile on the accepted V3 multimodal interaction shell by default. Read both `references/v4-learning-notes.md` and `references/v3-multimodal-html.md`, create a source-faithful `v4_study_model.json`, include the documented `ui` configuration, and render with `scripts/render_v3_multimodal_html.cjs`. Existing V3 models without `ui` must continue to render unchanged. Beautiful Article / Reacticle remains an alternate HTML family only when the user explicitly chooses it. The rejected content-router experiment is not a default or fallback.
-   - For PDF, always read `references/pdf-output-families.md` first. Read `references/pdf-latex-renderer.md` only when the selected family is official LaTeX lecture handout. Preserve the user's preferred PDF family. If the previous or requested output is a LaTeX lecture handout, add assets to the LaTeX/TikZ/figure pipeline instead of exporting a newly designed article PDF. If the requested output is DeepNote/HTML/beautiful article PDF, export from the final article HTML and label it as article-derived.
-   - For LaTeX PDF lecture notes, run `scripts/check_pdf_latex_official_alignment.py` on the final `.tex` and `asset_manifest.json` before delivery when practical.
+   - For PDF, always read `references/pdf-output-families.md` first. Preserve the user's preferred family. A DeepNote LaTeX PDF must preserve the audited content order while rendering Mermaid, tables, formulas, code, and selected frames as print-safe assets. An article-derived PDF must be exported from the final article HTML and labeled as article-derived.
    - In interactive choice mode, ask the renderer-specific choices for every selected output family before rendering.
 
 7. Validate before delivery.
@@ -201,16 +197,14 @@ When not in interactive choice mode, use learned user preferences as defaults bu
 
 ## Relationship To Existing Skills
 
-This skill owns the end-to-end decision flow, output mode, quality gates, and delivery layout. If local skills such as `video-render-pdf`, `beautiful-article`, `web-video-presentation`, `pdf`, or `playwright` are installed, reuse their scripts/templates/checklists as implementation aids. Do not depend on their names being present for the final user-facing contract.
-
-If local `bilibili-render-pdf` or `youtube-render-pdf` skills from `wdkns/wdkns-skills` are installed, treat their `assets/notes-template.tex` and writing/figure rules as the PDF renderer's source of truth. If they are not installed, use this pipeline's `assets/notes-template.tex`, which is maintained as an official-compatible fallback.
+This skill owns the end-to-end decision flow, output mode, quality gates, and delivery layout. If local skills such as `beautiful-article`, `web-video-presentation`, `pdf`, or `playwright` are installed, reuse their scripts/templates/checklists as implementation aids. Do not depend on their names being present for the final user-facing contract.
 
 Renderer mapping:
 
 | Renderer | Best for | Key intermediate files |
 | --- | --- | --- |
 | PDF output | study, review, printing, or article-preserving export | `deep_note.md`, `asset_manifest.json`, `pdf_render_brief.md`, `assets/`, HTML or `.tex` depending on PDF family |
-| Article HTML | V4 learning notes, multimodal study, source review, search, and local video recall | `deep_note.md`, `asset_manifest.json`, full transcript, `article_render_brief.md`, `v4_editorial_plan.json`, `v4_study_model.json`, article assets |
+| Article HTML | interactive illustrated notes, source review, search, and local video recall | `deep_note.md`, `asset_manifest.json`, full transcript, `article_render_brief.md`, `v4_editorial_plan.json`, `v4_study_model.json`, article assets |
 | Presentation HTML | 16:9 clickable/recordable explanation | `deep_note.md`, `asset_manifest.json`, `article.md`, `script.md`, `outline.md`, `presentation/storyboard.md`, `presentation/` |
 
 Do not uninstall working underlying skills until this pipeline has succeeded on several real videos and any scripts/templates still needed from them have been copied or replaced.
@@ -220,11 +214,11 @@ Do not uninstall working underlying skills until this pipeline has succeeded on 
 - Final language: Chinese unless the user asks otherwise.
 - Quality over runtime. Long or dense videos should become real teaching material, not short summaries.
 - Default mode is normal mode unless the user explicitly asks to choose options. In normal mode, use the default profile below and do not silently choose cheaper/token-saving shortcuts. If the user says "我要调试", "我要自己选", "给我选项", "从头到尾让我选", "解读 + 我要自己选", or similar, enter interactive choice mode and ask every relevant choice group again.
-- Default profile codes: `1E 2D 3A 4A 5A 6C 7A 8A 9A 10A 11A 12B 13A 14A 15B 16C 17A 18D`.
+- Default profile codes: `1E 3A 4A 5A 6C 7A 8A 9A 10A 11A 12B 13A 14A 15B 16C 17A 18D`. Select a PDF family by name only when PDF is requested.
 - Default output mode: `article-and-presentation` (`1E`). Produce Beautiful Article / Reacticle HTML plus a high-quality 16:9 Presentation. Do not generate PDF unless the user explicitly asks for PDF.
 - Default output root: `~/Downloads/视频解读`.
 - Default package shape: one video per folder, title-named files inside.
-- PDF default when explicitly requested: `2D`. Use an official-compatible LaTeX lecture handout, but the content source of truth is `deep_note.md` plus `asset_manifest.json` and reviewed assets. Map the Blog-style DeepNote into the official-compatible notes template while preserving depth, selected keyframes, Mermaid diagrams/tables, cover, examples, terms, and source-time provenance. Do not regenerate a shallow subtitle-derived handout and do not substitute an article-derived PDF unless the user explicitly asks to preserve HTML/DeepNote visual style.
+- PDF default when explicitly requested: DeepNote LaTeX PDF. Preserve `deep_note.md` order and Blog-style argumentation while adding print-safe hierarchy, selected keyframes, rendered Mermaid diagrams, readable tables, formulas, code, cover, and source-time provenance. Use an article-derived PDF only when the user explicitly asks to preserve the HTML visual style.
 - Source acquisition default: `3A`. Prefer official/platform subtitles first; if they are missing, incomplete, or unusable, obtain audio and run the configured ASR path. Do not silently skip ASR when no usable transcript exists.
 - Pinned keyframe policy: `4A` and `5A`. Always download/use the video stream when possible, extract subtitle-aligned candidate keyframes, build contact sheets, visually inspect candidates, and insert meaningful selected frames. Do not ask this choice again unless the user explicitly disables keyframe extraction for that run.
 - Depth and writing defaults: `6C` super-depth analysis and `7A` Blog-style DeepNote using the V4 learning-unit profile. Long/dense videos should become teaching material with argument reconstruction, intuition, mechanisms, worked examples, boundaries, caveats, and transferable frameworks. The body should be written as a Blog article, not a fixed-length summary or repeated card template; expand dense sections only with source-backed material.

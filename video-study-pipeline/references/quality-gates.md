@@ -30,8 +30,7 @@
 - If `asset_manifest.json` contains `insert: true` keyframes, diagrams, or tables, the corresponding ids or clearly matching placeholders appear in `deep_note.md` near the relevant section, or the renderer report records why the note could not place them.
 - `## 1. 主体正文` should not be pure prose for medium/long videos when useful assets exist. Keyframes, tables, Mermaid diagrams, screenshot suggestions, code/formula blocks, or decision/checklist assets should appear contextually in the body rather than only near the opening or in an appendix.
 - Keep mechanisms, examples, named systems, formulas/code, caveats, comparisons, and speaker conclusions.
-- For LaTeX PDF lecture notes, major sections end with `\subsection{本章小结}` unless a documented user-approved exception applies.
-- For LaTeX PDF lecture notes, writing follows a teaching sequence: motivation, main idea, mechanism, example/evidence, and takeaway where applicable. Do not dump subtitles in chronological order.
+- DeepNote LaTeX PDFs preserve the audited Blog-style teaching flow and do not add repetitive course-handout scaffolding.
 - If a short output is intentional, label it as brief/preview; do not call it a deep handout.
 
 ## HTML Checks
@@ -117,22 +116,17 @@
 - Text can be extracted from representative pages.
 - Embedded images are present when the HTML/source contains images.
 - If regenerating an existing PDF that the user liked, preserve the prior document family and structure unless the user approved a redesign.
-- PDF family matches `references/pdf-output-families.md` and the user's wording: DeepNote article-derived PDF, DeepNote LaTeX PDF, or official LaTeX lecture handout.
+- PDF family matches `references/pdf-output-families.md` and the user's wording: article-derived PDF or DeepNote LaTeX PDF.
 - Article-derived PDFs have a source HTML file, were exported through browser print/PDF, preserve selected HTML assets, and have acceptable page breaks after visual inspection.
-- DeepNote LaTeX PDFs preserve the `deep_note.md` top-level section order and do not restructure into official lecture-handout form.
+- DeepNote LaTeX PDFs preserve the `deep_note.md` top-level section order and Blog-style argumentation.
 - Mermaid, Graphviz, charts, and other code-defined visuals are rendered as visual assets before PDF export. The final PDF must not show Mermaid source code such as `flowchart TD` unless the video is specifically teaching Mermaid syntax.
 - Diagrams and key visual assets are not split across pages. If a diagram is too large, scale it, rotate it, or place it on its own page.
 - Normal body figures are size-constrained and do not consume an entire page unless the renderer brief explicitly marks them as full-page plates.
 - Complex tables remain readable: use styled HTML tables, LaTeX `longtable`/controlled-width columns, or reviewed visual table assets. A table that overflows, clips, or becomes unreadable fails the PDF gate.
-- Official LaTeX lecture handouts use the official-compatible renderer only when that family is selected or clearly requested.
-- LaTeX lecture handouts use an official-compatible `notes-template.tex`: installed `bilibili-render-pdf` / `youtube-render-pdf` template when available, otherwise this pipeline's fallback template.
-- For LaTeX lecture handouts, figures from the asset manifest must be inserted through the LaTeX figure pipeline; do not replace the handout with an article-style PDF solely to add assets.
 - If `asset_manifest.json` has `insert: true` body assets, the final `.tex` references their basenames or records explicit renderer skip reasons.
 - `\includegraphics` count is greater than one when both cover and body images are expected. A cover-only PDF fails when selected keyframes/diagrams/tables exist.
 - Body figure/table count is cross-checked against the manifest, excluding the cover.
-- Every inserted video keyframe has a caption and a concrete source time interval in a same-page footnote or equivalent mechanism. Caption-only time suffix is not sufficient for official-compatible LaTeX PDF.
-- Major sections contain `\subsection{本章小结}` unless documented exceptions apply.
-- `scripts/check_pdf_latex_official_alignment.py` passes when practical.
+- Every inserted video keyframe has a caption and a concrete source time interval near the figure or in an equivalent provenance mechanism.
 - Generated diagrams are visibly identified as generated/整理图 when they are not original keyframes.
 - Generated teaching figures use vector PDF where practical; PNG fallbacks are documented in the renderer report or manifest.
 - Use `pdfimages -list`, `mutool`, or rendered pages to confirm embedded images beyond the cover when tooling is available.

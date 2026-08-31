@@ -53,6 +53,13 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function humanizeReaderLabel(value, fallback) {
+  const label = String(value ?? "").trim();
+  if (!label) return fallback;
+  if (/\bV[34]\b/i.test(label) || /^MULTIMODAL STUDY\b/i.test(label) || /多模态学习页/.test(label)) return fallback;
+  return label;
+}
+
 function parseTime(value) {
   if (typeof value === "number") return value;
   const parts = String(value ?? "0").trim().split(":").map(Number);
@@ -344,7 +351,7 @@ function renderTimelineRow(chapter) {
 
 function renderBody(model, data, leadHtml, conclusionHtml, coverSrc, videoSrc) {
   const brandName = model.ui?.brand_name || "视频研究台";
-  const brandBadge = model.ui?.brand_badge || model.ui?.product_version || "V3";
+  const brandBadge = humanizeReaderLabel(model.ui?.brand_badge, "交互式图文笔记");
   const studyTabLabel = model.ui?.study_tab_label || "图文精读";
   const showThesisMap = model.ui?.show_thesis_map !== false;
   const toc = data.chapters.map((chapter) =>
@@ -360,7 +367,7 @@ function renderBody(model, data, leadHtml, conclusionHtml, coverSrc, videoSrc) {
   const cleanedCount = data.chapters.reduce((sum, chapter) => sum + chapter.cleaned_transcript.length, 0);
   const keyframeCount = Object.keys(model.assets?.keyframes || {}).length;
   const heroTitle = model.hero?.title_html || escapeHtml(model.metadata.title);
-  const eyebrow = model.hero?.eyebrow || `MULTIMODAL STUDY · ${model.metadata.bvid}`;
+  const eyebrow = humanizeReaderLabel(model.hero?.eyebrow, `VIDEO STUDY NOTES · ${model.metadata.bvid}`);
   return `<body style="--cover: url('${escapeHtml(coverSrc)}')">
   <a class="skip-link" href="#main">跳到正文</a>
   <header class="hero"><div class="hero-inner">
@@ -463,7 +470,7 @@ function build(args) {
   const app = fs.readFileSync(APP_PATH, "utf8");
   const body = renderBody(model, data, leadHtml, conclusionHtml, coverSrc, videoSrc);
   const payload = JSON.stringify(data).replaceAll("<", "\\u003c");
-  const titleSuffix = model.ui?.title_suffix || "V3 多模态学习页";
+  const titleSuffix = humanizeReaderLabel(model.ui?.title_suffix, "交互式图文笔记");
   const html = `<!doctype html>
 <html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="${escapeHtml(model.hero?.deck || model.metadata.title)}" /><link rel="icon" href="data:," /><title>${escapeHtml(model.metadata.title)} · ${escapeHtml(titleSuffix)}</title><style>${style}</style><style>.lead-intro{max-width:820px;margin:1.1rem 0 2rem;color:var(--muted)}.lead-intro p{margin:0 0 .8rem}.prose blockquote{margin:2rem 0;padding:1.25rem 1.5rem;border-left:4px solid var(--teal);background:var(--teal-soft);color:var(--ink)}.prose blockquote p{margin:0}.prose h4{margin:2.25rem 0 .8rem;font-family:var(--serif);font-size:1.35rem}.conclusion{margin-top:7rem;padding-top:3rem;border-top:1px solid var(--line)}.conclusion>h2{font-family:var(--serif);font-size:clamp(2.2rem,4vw,4.2rem);line-height:1.05}.inline-evidence img{object-fit:contain}@media(min-width:900px){.hero-title-nowrap{white-space:nowrap;font-size:.84em}}@media(max-width:760px){.lead-intro{font-size:.98rem}}</style>${learningNotesStyle ? `<style>${learningNotesStyle}</style>` : ""}</head>${body}<script id="studyPayload" type="application/json">${payload}</script><script>${app}</script></body></html>`;
   if (/【(?:关键帧|插图|图表|表格|截图建议)：/.test(html)) throw new Error("Unresolved asset anchor leaked into final HTML");

@@ -1,6 +1,6 @@
-# V3 Multimodal Study HTML
+# Interactive Illustrated Study HTML
 
-Use this reference whenever the selected output includes article HTML. It defines the accepted interaction shell. For new runs, also read `references/v4-learning-notes.md`: V4 is the default content profile inside this V3 shell.
+Use this reference whenever the selected output includes article HTML. It defines the accepted interaction shell. The `V3` schema and `V4` filenames are internal compatibility labels; never present them as the product name. For new runs, also read `references/v4-learning-notes.md` for the default editorial profile.
 
 ## Product Baseline
 
@@ -43,8 +43,8 @@ Required schema:
   },
   "ui": {
     "product_version": "V4",
-    "brand_badge": "V4 学习笔记",
-    "title_suffix": "V4 学习笔记",
+  "brand_badge": "交互式图文笔记",
+  "title_suffix": "交互式图文笔记",
     "study_tab_label": "精读笔记",
     "humanize_asset_labels": true,
     "learning_note_style": true,
@@ -59,7 +59,7 @@ Required schema:
     "transcript": "transcript_final.srt"
   },
   "hero": {
-    "eyebrow": "MULTIMODAL STUDY · BV...",
+    "eyebrow": "VIDEO STUDY NOTES · BV...",
     "title_html": "short designed title",
     "deck": "one 25-55-character content thesis; never describe the note product or playback features"
   },

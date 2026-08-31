@@ -14,11 +14,10 @@ Inside each video folder, use the video title as the file stem:
 
 - `<safe-title>.html`
 - `<safe-title>.pdf`
-- `<safe-title>.tex` when a LaTeX PDF lecture note was generated
+- `<safe-title>.tex` when a DeepNote LaTeX PDF was generated
 - `deep_note.md` when practical
 - `transcript_final.srt` / `transcript_final.vtt` when practical
 - `renderer_report.json` when practical
-- `official_alignment_report.json` when a LaTeX PDF official-alignment check was run
 - `<safe-title>-presentation.html` when a flattened presentation HTML export exists
 - `presentation/` for the editable/runnable 16:9 presentation project
 
@@ -52,14 +51,13 @@ For video-study packages, keep the full reviewed asset pool in the workdir and e
 
 The final folder should let the user answer "which frames/figures/tables did you use, and which keyframes did you skip?" without reading the chat transcript.
 
-For LaTeX PDF lecture-note output:
+For DeepNote LaTeX PDF output:
 
 - expose `<safe-title>.tex` when available
 - expose `assets/asset_manifest.json`
 - expose the asset files referenced by `\includegraphics` or table rendering
 - expose the final timestamped transcript when available
 - expose `renderer_report.json` or an equivalent report containing template choice, inserted assets, vector/raster conversion fallbacks, and visual-review status
-- expose `official_alignment_report.json` when `scripts/check_pdf_latex_official_alignment.py` was run
 - expose `review/pdf-pages-1-6.png` or an equivalent rendered visual audit image when available
 - do not expose only a PDF if asset-rich rendering was part of the requested mode
 
@@ -82,20 +80,19 @@ python3 "${CODEX_HOME:-$HOME/.codex}/skills/video-study-pipeline/scripts/package
   --video-id "<BVID_OR_YOUTUBE_ID>" \
   --html "<path/to/article.html>" \
   --pdf "<path/to/article.pdf>" \
-  --tex "<path/to/lecture-note.tex>" \
+  --tex "<path/to/deepnote-print.tex>" \
   --deep-note "<path/to/deep_note.md>" \
   --subtitle "<path/to/transcript_final.srt>" \
   --asset-manifest "<path/to/assets/asset_manifest.json>" \
   --asset-dir "<path/to/assets>" \
   --renderer-report "<path/to/renderer_report.json>" \
-  --official-alignment-report "<path/to/official_alignment_report.json>" \
   --review-file "<path/to/pdf-pages-1-6.png>" \
   --presentation "<path/to/presentation-dir>" \
   --presentation-html "<path/to/presentation.html>" \
   --overwrite
 ```
 
-Pass only the artifacts produced for the selected mode. For example, pass `--pdf --tex --deep-note --subtitle --asset-manifest --asset-dir` for a full `pdf-only` lecture-note package, only `--presentation` for `presentation-only`, or all relevant arguments for `all`.
+Pass only the artifacts produced for the selected mode. For example, pass `--pdf --tex --deep-note --subtitle --asset-manifest --asset-dir` for a complete DeepNote LaTeX PDF package, only `--presentation` for `presentation-only`, or all relevant arguments for `all`.
 
 When the presentation project was built by Vite, first create the local-openable flattened HTML:
 
