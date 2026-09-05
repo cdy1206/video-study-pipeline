@@ -1,8 +1,10 @@
 """Tests for source acquisition boundaries; no real credentials or network."""
 
 import json
+import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -190,10 +192,21 @@ class AcquisitionTests(unittest.TestCase):
         deps = {"python": "3.11", "yt_dlp": None, "ffmpeg": None, "ffprobe": None}
         with tempfile.TemporaryDirectory() as temp, patch.object(av, "dependencies", return_value=([], deps)), patch.object(av, "run_process") as run, patch("builtins.print"):
             self.assertEqual(av.main([URL, "--output", temp]), 2)
-            report = json.loads(next(Path(temp).glob("acquisition-report-*.json")).read_text())
+            report = json.loads(next(Path(temp).glob("acquisition-report-*.json")).read_text(encoding="utf-8"))
             self.assertEqual(report["error_code"], "missing_dependency")
             self.assertFalse(report["attempts"])
             run.assert_not_called()
+
+    def test_cli_outputs_utf8_even_with_ascii_terminal_encoding(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "source-\u6765\u6e90"
+            p = subprocess.run([sys.executable, str(Path(av.__file__)), "--doctor", "--output", str(output)],
+                               env=dict(os.environ, PYTHONIOENCODING="ascii"),
+                               capture_output=True, timeout=60)
+            self.assertIn(p.returncode, (0, 2), p.stderr.decode("utf-8", errors="replace"))
+            result = json.loads(p.stdout.decode("utf-8"))
+            self.assertEqual(result["status"], "environment_checked")
+            self.assertEqual(Path(result["report"]).parent, output.resolve())
 
 
 if __name__ == "__main__":

@@ -122,6 +122,7 @@ def run_process(command, timeout):
     # Killing the process group also stops ffmpeg after a timeout/interruption.
     with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                           text=True, encoding="utf-8", errors="replace",
+                          env=dict(os.environ, PYTHONIOENCODING="utf-8"),
                           start_new_session=os.name != "nt") as process:
         try:
             stdout, stderr = process.communicate(timeout=timeout)
@@ -385,4 +386,7 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     sys.exit(main())
