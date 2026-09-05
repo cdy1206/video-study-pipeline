@@ -53,6 +53,8 @@ git ls-remote https://github.com/cdy1206/video-study-pipeline.git HEAD
 
 ## 视频没有字幕
 
+先使用内置的 `scripts/acquire_video.py` 检查实际来源，不要让每个客户端临时拼下载命令。安装依赖、浏览器登录态、云端执行限制和错误码处理统一见 [视频获取说明](../video-study-pipeline/references/source-acquisition.md)。
+
 这不等于任务结束。依次检查：
 
 1. 平台字幕或 uploader 字幕是否存在。

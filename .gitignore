@@ -10,3 +10,8 @@ __pycache__/
 .env
 .env.*
 !.env.example
+*cookies*.txt
+*.cookies
+acquisition-report-*.json
+acquired-*/
+.acquire-*/

@@ -73,6 +73,8 @@ https://www.bilibili.com/video/BVxxxxxxxxxx
 
 B 站普通链接、BV 号和“稍后再看”链接都可以直接粘贴。
 
+首次处理 B 站视频，建议先在这台电脑的 Edge、Chrome 或 Firefox 登录并确认能正常播放，再告诉 AI 使用哪个浏览器。客户端需要能在本机运行命令；如果它只在云端运行，请先提供本地视频或字幕。具体操作见 [视频获取说明](video-study-pipeline/references/source-acquisition.md)。
+
 ### 3. 打开成品
 
 完成后，打开生成的 `.html` 文件即可阅读：

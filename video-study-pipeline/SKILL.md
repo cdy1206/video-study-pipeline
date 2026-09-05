@@ -120,6 +120,9 @@ When not in interactive choice mode, use learned user preferences as defaults bu
    - For mixed inputs, keep source boundaries. Do not merge PDF facts, transcript text, and webpage material into one anonymous blob.
 
 2. Acquire source.
+   - For video URLs, read `references/source-acquisition.md` and use `scripts/acquire_video.py` for the initial probe and video/audio/subtitle acquisition. It preserves Bilibili part numbers, checks local dependencies, uses bounded retries, and returns a sanitized acquisition report. Run one video at a time.
+   - Browser cookies require a local browser profile. Use the browser already authorized in the conversation, or obtain the user's choice before first accessing a new login profile; pass `--browser edge/chrome/firefox/auto` explicitly. Reuse that authorization for the same task. Do not upload cookies to a cloud client. A client with no local shell/browser access should receive local source files instead.
+   - `metadata_ready` only confirms metadata access. `source_ready` confirms the requested source action, not transcript completeness or final-note quality. Inspect report artifacts and validate subtitle coverage before proceeding. `needs_asr` routes to audio + configured ASR, never to title-only notes. If the report has no usable source, report the blocker and preserve the current outputs.
    - For video input, inspect title, author/channel, duration, cover, chapters/分P, and subtitle availability.
    - For video input, prefer official/manual subtitles.
    - If video subtitles are missing or incomplete, obtain audio and run the configured ASR path. Do not silently skip ASR.

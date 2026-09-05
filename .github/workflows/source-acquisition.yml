@@ -1,0 +1,40 @@
+name: Source acquisition checks
+
+on:
+  push:
+    paths:
+      - 'video-study-pipeline/scripts/acquire_video.py'
+      - 'video-study-pipeline/scripts/test_acquire_video.py'
+      - '.github/workflows/source-acquisition.yml'
+  pull_request:
+    paths:
+      - 'video-study-pipeline/scripts/acquire_video.py'
+      - 'video-study-pipeline/scripts/test_acquire_video.py'
+      - '.github/workflows/source-acquisition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.9'
+          - os: ubuntu-latest
+            python: '3.13'
+          - os: macos-latest
+            python: '3.11'
+          - os: windows-latest
+            python: '3.11'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Test without browser credentials or video downloads
+        run: python -m unittest discover -s video-study-pipeline/scripts -p test_acquire_video.py -v
